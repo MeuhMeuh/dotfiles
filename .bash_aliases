@@ -1,0 +1,1 @@
+/Users/alexismenard/.bash_aliases
