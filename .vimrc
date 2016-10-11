@@ -1,7 +1,7 @@
 " Use the Solarized Dark theme
 
-" colorscheme stereokai 
 colorscheme wellsokai 
+" colorscheme wombat
 
 set nocompatible
 set clipboard=unnamed
@@ -90,6 +90,8 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
+noremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
 " Automatic commands
 if has("autocmd")
 	" Enable file type detection
@@ -98,6 +100,14 @@ if has("autocmd")
 	autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
 	" Treat .md files as Markdown
 	autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+
+    " Permits to open nerdtree automatically if no specified file is edited
+    " when typing "vim" or "v".
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+    "Permits to close vim if the only left tab is the nerdtree.
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 endif
 
 filetype off
@@ -110,9 +120,13 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'wincent/command-t'
 Plugin 'sjbach/lusty'
 Plugin 'Herzult/phpspec-vim'
+Plugin 'evidens/vim-twig'
+Plugin 'scrooloose/nerdtree'
+Plugin 'itchyny/lightline.vim'
+Plugin 'tpope/vim-commentary'
+Plugin 'vim-scripts/AutoComplPop'
 
 Bundle 'arnaud-lb/vim-php-namespace'
-Bundle 'autotag'
 
 Bundle 'joonty/vim-phpqa.git'
 
@@ -124,6 +138,26 @@ let mapleader=","
 :set expandtab
 
 map <leader>src :!tree src<cr>
+
+" Nerdtree file highlighting
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+  exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+  exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+
+call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
 
 function! IPhpInsertUse()
      call PhpInsertUse()
@@ -142,12 +176,31 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
+" Nerdtree : CTRL+N toggle
+map <C-n> :NERDTreeToggle<CR>
+
+
+
+
+" Nerdtree : file highlighting
+
 " Enable omni complete.
 autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
 
 let g:phpqa_messdetector_ruleset = "/Users/alexismenard/phpmd/ruleset.xml"
 let g:phpqa_codesniffer_args = "--standard=PSR2"
+let g:phpqa_open_loc = 0
 
 " Move with ctrl + HJKL to move between windows
 map <C-J> <C-W>j<C-W>_
 map <C-K> <C-W>k<C-W>_
+map <C-H> <C-W>h<C-W>_
+map <C-L> <C-W>l<C-W>_
+
+" jk simulates ESC press.
+:imap jk <Esc>
+
+set tags+=vendor.tags
+
+" Comments easily.
+map <Leader>gc :Commentary<CR>
