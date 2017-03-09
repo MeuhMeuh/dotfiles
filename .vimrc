@@ -100,12 +100,14 @@ if has("autocmd")
 	autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
 	" Treat .md files as Markdown
 	autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+	" Treat .dist as YML.
+	autocmd BufNewFile,BufRead *.dist setfiletype yml syntax=yml
 
     " Permits to open nerdtree automatically if no specified file is edited
     " when typing "vim" or "v".
     autocmd StdinReadPre * let s:std_in=1
     autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
+    
     "Permits to close vim if the only left tab is the nerdtree.
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 endif
@@ -125,6 +127,11 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'itchyny/lightline.vim'
 Plugin 'tpope/vim-commentary'
 Plugin 'vim-scripts/AutoComplPop'
+
+"" Snipmate
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
 
 Bundle 'arnaud-lb/vim-php-namespace'
 
@@ -197,6 +204,12 @@ map <C-K> <C-W>k<C-W>_
 map <C-H> <C-W>h<C-W>_
 map <C-L> <C-W>l<C-W>_
 
+imap <C-J> <Esc><C-W>j<C-W>_
+imap <C-K> <Esc><C-W>k<C-W>_
+imap <C-H> <Esc><C-W>h<C-W>_
+imap <C-L> <Esc><C-W>l<C-W>_
+
+
 " jk simulates ESC press.
 :imap jk <Esc>
 
@@ -204,3 +217,48 @@ set tags+=vendor.tags
 
 " Comments easily.
 map <Leader>gc :Commentary<CR>
+
+" Easy delete in black hole
+nnoremap <Leader>d "_dd
+vnoremap <Leader>d "_dd
+
+nnoremap <Tab> >>_
+nnoremap <S-Tab> <<_
+inoremap <S-Tab> <C-D>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+
+au BufNewFile,BufRead *.ejs set filetype=html
+
+" Swapping :)
+function! s:swap_lines(n1, n2)
+    let line1 = getline(a:n1)
+    let line2 = getline(a:n2)
+    call setline(a:n1, line2)
+    call setline(a:n2, line1)
+endfunction
+
+function! s:swap_up()
+    let n = line('.')
+    if n == 1
+        return
+    endif
+
+    call s:swap_lines(n, n - 1)
+    exec n - 1
+endfunction
+
+function! s:swap_down()
+    let n = line('.')
+    if n == line('$')
+        return
+    endif
+
+    call s:swap_lines(n, n + 1)
+    exec n + 1
+endfunction
+
+noremap <silent> <c-s-k> :call <SID>swap_up()<CR>
+noremap <silent> <c-s-j> :call <SID>swap_down()<CR>
+
+noremap <Leader>qpc :!bin/phpunit %<CR>
