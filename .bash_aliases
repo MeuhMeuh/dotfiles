@@ -29,5 +29,5 @@ alias behat='bin/behat'
 
 alias vimrc='vim ~/.vimrc'
 alias ctags-generate='ctags -R --languages=PHP --PHP-kinds=cif --exclude=.git/* --exclude=vendor/*/vendor --fields=+aimS'
-alias ctags-generate-source='ctags --options=~/.ctags src'
-alias ctags-generate-vendor='ctags --options=/.ctags -fvendor.tags vendor'
+alias ctags-generate-source='ctags --options=$HOME/.ctags.cnf src/'¬
+alias ctags-generate-vendor='ctags --options=$HOME/.ctags.cnf -fvendor.tags vendor/'
