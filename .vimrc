@@ -221,6 +221,11 @@ map <Leader>gc :Commentary<CR>
 " Easy delete in black hole
 nnoremap <Leader>d "_dd
 vnoremap <Leader>d "_dd
+" Easy yank in system clipboard
+nnoremap <Leader>y "*y
+vnoremap <Leader>y "*y
+nnoremap <Leader>ly "*y
+vnoremap <Leader>ly "*y
 
 nnoremap <Tab> >>_
 nnoremap <S-Tab> <<_
