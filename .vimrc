@@ -267,3 +267,6 @@ noremap <silent> <c-s-k> :call <SID>swap_up()<CR>
 noremap <silent> <c-s-j> :call <SID>swap_down()<CR>
 
 noremap <Leader>qpc :!bin/phpunit %<CR>
+" Command T conf¬
+let g:CommandTMaxFiles=400000¬
+let g:CommandTFileScanner = "watchman"
