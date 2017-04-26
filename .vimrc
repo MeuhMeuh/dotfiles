@@ -1,10 +1,11 @@
 " Use the Solarized Dark theme
 
-colorscheme wellsokai 
+" colorscheme wellsokai 
+colorscheme base16-monokai
 " colorscheme wombat
 
 set nocompatible
-set clipboard=unnamed
+set clipboard=unnamedplus
 " Enhance command-line completion
 set wildmenu
 " Allow cursor keys in insert mode
@@ -128,6 +129,8 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'tpope/vim-commentary'
 Plugin 'vim-scripts/AutoComplPop'
 
+Plugin 'chriskempson/base16-vim'
+
 "" Snipmate
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
@@ -179,7 +182,7 @@ autocmd FileType php inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
 autocmd FileType php noremap <Leader>u :call PhpInsertOrderedUse()<CR>
 
 " Ultisnips : trigger configuration.
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<c-x>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
@@ -199,20 +202,25 @@ let g:phpqa_codesniffer_args = "--standard=PSR2"
 let g:phpqa_open_loc = 0
 
 " Move with ctrl + HJKL to move between windows
-map <C-J> <C-W>j<C-W>_
-map <C-K> <C-W>k<C-W>_
+map <expr> <C-J> pumvisible() ? "\<C-n>" : "<C-W>j<C-W>_"
+map <expr> pumvisible() ? "\<C-p>" : "<C-K> <C-W>k<C-W>_"
 map <C-H> <C-W>h<C-W>_
 map <C-L> <C-W>l<C-W>_
 
-imap <C-J> <Esc><C-W>j<C-W>_
-imap <C-K> <Esc><C-W>k<C-W>_
+imap <expr> <C-J> pumvisible() ? "\<C-n>" : "<Esc><C-W>j<C-W>_"
+imap <expr> <C-K> pumvisible() ? "\<C-p>" : "<Esc><C-W>k<C-W>_"
 imap <C-H> <Esc><C-W>h<C-W>_
 imap <C-L> <Esc><C-W>l<C-W>_
+
+" Fixes the annoying pum enter doing a line break when you dont need to
+imap <expr> <CR> pumvisible() ? "" : "<CR>"
 
 
 " jk simulates ESC press.
 :imap jk <Esc>
+:imap wjk <Esc>:w<CR>
 
+" For herzult ctags
 set tags+=vendor.tags
 
 " Comments easily.
@@ -221,11 +229,6 @@ map <Leader>gc :Commentary<CR>
 " Easy delete in black hole
 nnoremap <Leader>d "_dd
 vnoremap <Leader>d "_dd
-" Easy yank in system clipboard
-nnoremap <Leader>y "*y
-vnoremap <Leader>y "*y
-nnoremap <Leader>ly "*y
-vnoremap <Leader>ly "*y
 
 nnoremap <Tab> >>_
 nnoremap <S-Tab> <<_
@@ -263,7 +266,17 @@ function! s:swap_down()
     exec n + 1
 endfunction
 
-noremap <silent> <c-s-k> :call <SID>swap_up()<CR>
-noremap <silent> <c-s-j> :call <SID>swap_down()<CR>
+noremap <silent> <c-s-p> :call <SID>swap_up()<CR>
+noremap <silent> <c-s-m> :call <SID>swap_down()<CR>
 
 noremap <Leader>qpc :!bin/phpunit %<CR>
+
+hi Normal ctermbg=235
+
+" Command T conf
+let g:CommandTMaxFiles=400000
+" let g:CommandTFileScanner = "git"
+let g:CommandTFileScanner = "watchman"
+
+" Jump to a tag with <Leader>o
+nnoremap <Leader>o :tag <c-r><c-w><cr>
