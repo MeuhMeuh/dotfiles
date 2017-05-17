@@ -1,6 +1,6 @@
 " Use the Solarized Dark theme
 
-" colorscheme wellsokai 
+" colorscheme wellsokai
 colorscheme base16-monokai
 " colorscheme wombat
 
@@ -206,6 +206,9 @@ inoremap <silent> <C-L> <Esc><C-W>l<C-W>_
 set omnifunc=syntaxcomplete#Complete
 " set completeopt=longest,menuone
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Fixes the annoying pum enter doing a line break when you dont need to
+imap <expr> <CR> pumvisible() ? "" : "<CR>"
 
 
 " jk simulates ESC press.
