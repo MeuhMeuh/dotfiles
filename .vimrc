@@ -127,14 +127,10 @@ Plugin 'evidens/vim-twig'
 Plugin 'scrooloose/nerdtree'
 Plugin 'itchyny/lightline.vim'
 Plugin 'tpope/vim-commentary'
+" Plugin 'ervandew/supertab'
 Plugin 'vim-scripts/AutoComplPop'
 
 Plugin 'chriskempson/base16-vim'
-
-"" Snipmate
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
 
 Bundle 'arnaud-lb/vim-php-namespace'
 
@@ -189,11 +185,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " Nerdtree : CTRL+N toggle
 map <C-n> :NERDTreeToggle<CR>
 
-
-
-
-" Nerdtree : file highlighting
-
 " Enable omni complete.
 autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
 
@@ -202,18 +193,19 @@ let g:phpqa_codesniffer_args = "--standard=PSR2"
 let g:phpqa_open_loc = 0
 
 " Move with ctrl + HJKL to move between windows
-map <expr> <C-J> pumvisible() ? "\<C-n>" : "<C-W>j<C-W>_"
-map <expr> pumvisible() ? "\<C-p>" : "<C-K> <C-W>k<C-W>_"
-map <C-H> <C-W>h<C-W>_
-map <C-L> <C-W>l<C-W>_
+inoremap <expr> <C-J> pumvisible() ? "\<C-n>" : "<C-W>j<C-W>_"
+inoremap <expr> <C-P> pumvisible() ? "\<C-p>" : "<C-K> <C-W>k<C-W>_"
+noremap <silent> <C-H> <C-W>h<C-W>_
+noremap <silent> <C-L> <C-W>l<C-W>_
 
-imap <expr> <C-J> pumvisible() ? "\<C-n>" : "<Esc><C-W>j<C-W>_"
-imap <expr> <C-K> pumvisible() ? "\<C-p>" : "<Esc><C-W>k<C-W>_"
-imap <C-H> <Esc><C-W>h<C-W>_
-imap <C-L> <Esc><C-W>l<C-W>_
+inoremap <expr> <C-J> pumvisible() ? "\<C-n>" : "<Esc><C-W>j<C-W>_"
+inoremap <expr> <C-K> pumvisible() ? "\<C-p>" : "<Esc><C-W>k<C-W>_"
+inoremap <silent> <C-H> <Esc><C-W>h<C-W>_
+inoremap <silent> <C-L> <Esc><C-W>l<C-W>_
 
-" Fixes the annoying pum enter doing a line break when you dont need to
-imap <expr> <CR> pumvisible() ? "" : "<CR>"
+set omnifunc=syntaxcomplete#Complete
+" set completeopt=longest,menuone
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
 " jk simulates ESC press.
@@ -277,6 +269,9 @@ hi Normal ctermbg=235
 let g:CommandTMaxFiles=400000
 " let g:CommandTFileScanner = "git"
 let g:CommandTFileScanner = "watchman"
+" For watchman : not ignoring anything
+let g:CommandTWildIgnore = ""
+let g:CommandTMaxDepth=30
 
 " Jump to a tag with <Leader>o
 nnoremap <Leader>o :tag <c-r><c-w><cr>
